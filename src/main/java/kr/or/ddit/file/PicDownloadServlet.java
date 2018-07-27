@@ -25,7 +25,7 @@ public class PicDownloadServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// <img src="/pic?id=2/>
-		int id = Integer.parseInt(request.getParameter("id"));
+		String id = request.getParameter("id");
 		
 		// 물리파일명을 이용하여 사진 다운로드부터 진행
 		
