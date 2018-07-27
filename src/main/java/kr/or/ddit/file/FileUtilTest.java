@@ -1,9 +1,5 @@
 package kr.or.ddit.file;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Test;
-
 public class FileUtilTest { // 테스트
 
 //	/**
