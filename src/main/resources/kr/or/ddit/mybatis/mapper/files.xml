@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="files">
+
   <!-- 활성화 혹은 비활성화 게시판 생성 -->
   <insert id="createFiles" parameterType="FilesVo">
 	insert into files values (f_no.nextval, #{w_no}, #{f_picname}, #{f_picpath}, #{f_name})
-  </insert>
+  </insert>  
+  
+  <!--  -->
+  <select id="addFileList" resultType="FilesVo">
+    select * from files where w_no = #{w_no}
+  </select>
+  
+  <!-- 파일 수정 -->
+  <update id="filesUpdate" parameterType="FilesVo">
+  	update files set where f_picname=#{f_picname}, f_picpath=#{f_picpath}, f_name=#{f_name} w_no=#{w_no}
+  </update>
 </mapper>

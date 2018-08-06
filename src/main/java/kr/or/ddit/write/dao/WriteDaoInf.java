@@ -85,6 +85,17 @@ public interface WriteDaoInf {
 	int newWrite(WriteVo writeVo);
 	
 	/**
+	 * Method : answerWrite
+	 * 최초작성일 : 2018. 7. 31.
+	 * 작성자 : PC18
+	 * 변경이력 :
+	 * @param writeVo
+	 * @return
+	 * Method 설명 : 답글을 작성한다.
+	 */
+	int answerWrite(WriteVo writeVo);
+	
+	/**
 	 * Method : newWrite
 	 * 최초작성일 : 2018. 7. 25.
 	 * 작성자 : PC18

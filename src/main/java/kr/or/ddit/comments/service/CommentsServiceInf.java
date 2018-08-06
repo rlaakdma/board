@@ -27,4 +27,15 @@ public interface CommentsServiceInf {
 	 * Method 설명 : 댓글 정보 조회
 	 */
 	List<CommentsVo> getComments(int w_no);
+
+	/**
+	 * Method : updateCnt
+	 * 최초작성일 : 2018. 8. 1.
+	 * 작성자 : user
+	 * 변경이력 :
+	 * @param c_no
+	 * @return
+	 * Method 설명 : 매개변수를 통해 댓글을 삭제한다.
+	 */
+	int updateCnt(int c_no);
 }

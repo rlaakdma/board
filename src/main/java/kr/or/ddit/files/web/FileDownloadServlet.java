@@ -1,4 +1,4 @@
-package kr.or.ddit.file;
+package kr.or.ddit.files.web;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -17,21 +17,22 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/fileDownload")
 public class FileDownloadServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+       
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		//FileUtil.fileUploadPath : brown.png
+		//파라미터로 파일명 제공
+		// localhost:8180/fileDownload?fileName=brown.png
+		String filename = request.getParameter("filename");
+		response.setHeader("Content-Disposition", "attachment; filename=\""+filename+"\""); 
+		response.setContentType("application/octet-stream");
 		
-		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			response.setHeader("Content-Disposition", "attachment; filename=\"james.png\"");
-			response.setContentType("application/octet-stream");
-			
-			// FileUtil.fileUploadPath : rabit.png
-			// 파라미터로 파일로 제공
-			// http://localhost:8180/fileDownload?fileName=james.png // 다운경로로 다운받아짐.
-			String fileName = request.getParameter("fileName");
-			
-			// D:\A_TeachingMaterial\7.JspSpring\fileUpload.james.png <--- 여기 안에 james.png이 있어야 함.
-			String file = FileUtil.fileUploadPath + File.separator + fileName;
-			
-			// file 입출력을 위한 준비
-			ServletOutputStream sos = response.getOutputStream();
+		
+		//D:\\A_TeachingMaterial\\7.JspSpring\\fileUpload\\brown.png
+		String file = FileUtil.fileUploadPath + File.separator + filename;
+		
+		//file 입출력을 위한 준비
+		ServletOutputStream sos = response.getOutputStream();
 		
 		File f = new File(file);
 		FileInputStream fis = new FileInputStream(f);

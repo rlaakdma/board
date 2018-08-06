@@ -136,6 +136,24 @@ public class WriteDao implements WriteDaoInf {
 	}
 	
 	/**
+	 * Method : answerWrite
+	 * 최초작성일 : 2018. 7. 31.
+	 * 작성자 : PC18
+	 * 변경이력 :
+	 * @param writeVo
+	 * @return
+	 * Method 설명 : 답글을 작성한다.
+	 */
+	@Override
+	public int answerWrite(WriteVo writeVo) {
+		SqlSession session = sqlSessionFactory.openSession();
+		int insertCnt = session.insert("write.answerWrite", writeVo);
+		session.commit();
+		session.close();
+		return insertCnt;
+	}
+	
+	/**
 	 * Method : newWrite
 	 * 최초작성일 : 2018. 7. 25.
 	 * 작성자 : PC18

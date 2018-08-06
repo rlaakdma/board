@@ -23,103 +23,148 @@
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>-->
 <script type="text/javascript" src="/js/jquery-1.12.4.js"></script>
 <script src="/SE2/js/HuskyEZCreator.js"></script>
-<script type="text/javascript">
-	var oEditors = []; // 개발되어 있는 소스에 맞추느라, 전역변수로 사용하였지만, 지역변수로 사용해도 전혀 무관 함.
-	
-	//첨부파일 추가
-	var rowIndex = 1;
-	       
-	function addFile(form){
-	if(rowIndex > 4) return false;
-	
-	rowIndex++;
-	var getTable = document.getElementById("insertTable");
-	var Row = getTable.insertRow(getTable.rows.length);
-	var Cell = Row.insertCell(0);
-		Cell.innerHTML = "<tr><td colspan=2><input type='file' name='f_name' NAME='f_name" + rowIndex + "' size=25></td></tr>";
-	}
-	
-	$(document).ready(function() {
-		// Editor Setting
-		nhn.husky.EZCreator.createInIFrame({
-			oAppRef : oEditors, // 전역변수 명과 동일해야 함.
-			elPlaceHolder : "w_cnt", // 에디터가 그려질 textarea ID 값과 동일 해야 함.
-			sSkinURI : "/SE2/SmartEditor2Skin.html", // Editor HTML
-			fCreator : "createSEditor2", // SE2BasicCreator.js 메소드명이니 변경 금지 X
-			htParams : {
-				// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
-				bUseToolbar : true,
-				// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
-				bUseVerticalResizer : true,
-				// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
-				bUseModeChanger : true, 
-			}
-		});
-	
-		// 전송버튼 클릭이벤트
-		$("#savebutton").click(function(){
-			if(confirm("저장하시겠습니까?")) {
-				// id가 smarteditor인 textarea에 에디터에서 대입
-				oEditors.getById["w_cnt"].exec("UPDATE_CONTENTS_FIELD", []);
-	
-				// 이부분에 에디터 validation 검증
-				if(validation()) {
-					$("#frm").submit();
-				}
-			}
-		})
-	});
-	
-	// 필수값 Check
-	function validation(){
-		var contents = $.trim(oEditors[0].getContents());
-		if(contents === '<p>&nbsp;</p>' || contents === ''){ // 기본적으로 아무것도 입력하지 않아도 <p>&nbsp;</p> 값이 입력되어 있음. 
-			alert("내용을 입력하세요.");
-			oEditors.getById['w_cnt'].exec('FOCUS');
-			return false;
-		}
-		return true;
-	}
-</script>
-</head>
+</head>			
 <body>
-	<!-- top.jsp -->
 	<%@ include file="/common/top.jsp" %>
 	<div class="container-fluid">
 		<div class="row">
-			<!-- left.jsp -->
 			<%@ include file="/common/left.jsp" %>
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-				<div class="row">
-					<div class="col-sm-8 blog-main">
-						<div class="table-responsive">			
-						<form action="/updateWrite" method="post" id="frm">
-						<div class="form-group">
+			
+			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">		
+				
+				<form action="/updateWrite" method="post" id="frmUpdate" enctype="multipart/form-data">
+					<input type="hidden" id="dd" name="dd">
+					<input type="hidden" id="dd0" name="dd0">
+					
+					<div class="form-group">
 						<label>작성자 : ${studentVo.std_id}<br><br>
-						작성일시 : <fmt:formatDate value="${writeVo.w_date}" pattern="yyyy-MM-dd HH:MM" /></label><br></div>
-						<label>제목 : </label><input type="text" style="width:300px;" id="w_title" name="w_title" value="${writeVo.w_title}">							                
-							<input type="hidden" name="w_name" value="${studentVo.std_id}"><br><br>
-							<textarea name="w_cnt" id="w_cnt" rows="10" cols="100" style="width:766px; height:412px;">${writeVo.w_cnt}</textarea> 
-							<div class="form-group">
-								<label for="f_name" class="col-sm-2 control-label">첨부파일</label>
-								<div id="w_cntLabel" class="col-sm-6">
-								<table id="insertTable">
-									<tr>
-										<td><input type="file" name="f_name"></td>
-										<td><input type="button" value="+" onClick="addFile(this.form)" class="btn btn-default"></td>
-									</tr>
-								</table>
-								</div>
-							<input type="hidden" id="id" name="id" value="${studentVo.id}">
-							<input type="hidden" id="b_no" name="b_no" value="${b_no}">
-							<input type="button" id="cancelbutton" value="돌아가기" />  <input type="button" id="savebutton" value="작성하기" />
-							</div>
-						</form>
+						작성일시 : <fmt:formatDate value="${writeVo.w_date}" pattern="yyyy-MM-dd HH:MM" /></label><br>
+					</div>
+				
+					<div class="form-group">
+						<label for="id" class="col-sm-2 control-label">제목 : </label>
+						<input type="text" style="width:300px;" id="w_title" name="w_title" value="${writeVo.w_title}">							                
+						<input type="hidden" name="w_name" value="${studentVo.std_id}"><br><br>
+					</div>			
+					
+					<div class="form-group">
+						<label for="id" class="col-sm-2 control-label">작성자 : ${studentVo.std_id}</label><br><br>
+						<input type="hidden" name="w_name" value="${studentVo.std_id}">
+					</div>					
+					
+					<div class="form-group">					
+						<label for="id" class="col-sm-2 control-label">내용 : </label>
+						<div class="col-sm-6" name="post_content">						
+							<textarea name="smarteditor" id="smarteditor" rows="10" cols="100" style="width:766px; height:412px;">${writeVo.w_cnt}</textarea>
 						</div>
 					</div>
-				</div>
+					
+					<div class="form-group">
+						<label for="f_name" class="col-sm-2 control-label">첨부파일</label>
+						
+						<div id="w_cntLabel" class="col-sm-10">
+							<input type="file" name="f_name" id="f_name">
+								<c:if test="${FilesList != null}">
+									<c:forEach items="${FilesList }" var="vo">
+									${vo.f_name }<br>
+									</c:forEach>
+								</c:if>
+						</div>
+						
+						<div name="addfile" id="addfile">
+							<c:if test="${FilesList.size() < 5 }">
+								<input type="file" name="pic" id="pic">
+							</c:if>	
+						</div>	
+												
+							<input type="button" name="plusfileBtn" id="plusfileBtn" value="+">
+							<input type="button" name="minusfileBtn" id="minusfileBtn" value="-">
+					</div>					
+					
+					<script type="text/javascript">
+					
+						// 첨부파일 추가/삭제 버튼(editor 소스보다 위에 있어야 함)
+						$(function(){
+							var a = ${FilesList.size() == 0 ? 1 : FilesList.size()};							
+							
+							$("#dd").val(a);
+							$("#dd0").val(a);
+							
+							$("#plusfileBtn").on("click",function(){
+								if(a < 4){
+									$("#addfile").append("<div id=\"add\"><input type=\"file\" name=\"f_name\" id=\"f_name\"></div>");
+									a++;
+									$("#dd").val(a);
+								}
+							});
+							
+							$("#minusfileBtn").on("click",function(){
+								$("div[id=add]:last").remove();
+								a--;
+							});
+							
+						});
+						
+					
+						// editor
+						var oEditors = []; // 개발되어 있는 소스에 맞추느라, 전역변수로 사용하였지만, 지역변수로 사용해도 전혀 무관 함.
+						
+						$(function() {
+							// Editor Setting
+							nhn.husky.EZCreator.createInIFrame({
+								oAppRef : oEditors, // 전역변수 명과 동일해야 함.
+								elPlaceHolder : "smarteditor", // 에디터가 그려질 textarea ID 값과 동일 해야 함.
+								sSkinURI : "/SE2/SmartEditor2Skin.html", // Editor HTML
+								fCreator : "createSEditor2", // SE2BasicCreator.js 메소드명이니 변경 금지 X
+								htParams : {
+									// 툴바 사용 여부 (true:사용/ false:사용하지 않음)
+									bUseToolbar : true,
+									// 입력창 크기 조절바 사용 여부 (true:사용/ false:사용하지 않음)
+									bUseVerticalResizer : true,
+									// 모드 탭(Editor | HTML | TEXT) 사용 여부 (true:사용/ false:사용하지 않음)
+									bUseModeChanger : true, 
+								}
+							});
+						
+							// 전송버튼 클릭이벤트
+							$("#savebutton").click(function(){
+								if(confirm("저장하시겠습니까?")) {
+									// id가 smarteditor인 textarea에 에디터에서 대입
+									oEditors.getById["smarteditor"].exec("UPDATE_CONTENTS_FIELD", []);
+									
+									// 이부분에 에디터 validation 검증
+									if(validation()) {
+										$("#frmUpdate").submit();
+									}
+								}
+							});
+						});
+						
+						// 필수값 Check
+						function validation(){
+							var contents = $.trim(oEditors[0].getContents());
+							if(contents === '<p>&nbsp;</p>' || contents === ''){ // 기본적으로 아무것도 입력하지 않아도 <p>&nbsp;</p> 값이 입력되어 있음. 
+								alert("내용을 입력하세요.");
+								oEditors.getById['smarteditor'].exec('FOCUS');
+								return false;
+							}
+						
+							return true;
+						}						
+					</script>				
+											
+					<input type="hidden" id="id" name="id" value="${studentVo.id}">
+					<input type="hidden" id="w_no" name="w_no" value="${writeVo.w_no}">
+					<input type="hidden" id="b_no" name="b_no" value="${b_no}">
+					
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button id="savebutton" type="button" class="btn btn-default">수정</button>
+						</div>
+					</div>
+				</form>
+				</div>			
 			</div>
 		</div>
-	</div>
 </body>
 </html>

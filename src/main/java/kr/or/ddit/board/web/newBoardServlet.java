@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import kr.or.ddit.board.model.BoardVo;
 import kr.or.ddit.board.service.BoardService;
 import kr.or.ddit.board.service.BoardServiceInf;
+import kr.or.ddit.student.model.StudentVo;
 
 /**
  * Servlet implementation class newBoard
@@ -29,7 +30,10 @@ public class newBoardServlet extends HttpServlet {
 		
 		// session 객체에 게시판 정보를 설정
 		HttpSession session = request.getSession();
-		session.setAttribute("boardAllList", boardAllList);		
+		session.setAttribute("boardAllList", boardAllList);	
+		StudentVo studentVo = (StudentVo) session.getAttribute("studentVo");
+		int id3 = studentVo.getId();
+		System.out.println(id3);
 		
 		// 위임
 		request.getRequestDispatcher("/common/newBoard.jsp").forward(request, response);

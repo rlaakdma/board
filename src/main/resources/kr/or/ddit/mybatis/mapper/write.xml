@@ -41,11 +41,17 @@
   	<!-- 새글작성 -->
   	<insert id="newWrite" parameterType="WriteVo">
   	insert into write (w_no, b_no, id, w_title, w_gno, w_date, w_cnt, w_name, w_dlt) 
-  	values (w_no.nextval, #{b_no}, #{id}, #{w_title}, w_gno.nextval, sysdate, #{w_cnt}, #{w_name}, 'n')
+  	values (w_no.nextval, #{b_no}, #{id}, #{w_title}, (select count(*)+1 from write), sysdate, #{w_cnt}, #{w_name}, 'n')
 	</insert>
 	
 	<!-- 전체 건수 -->
   	<select id="getWriteCnt" resultType="int">
     SELECT count(*) FROM write
   	</select>
+  	
+  	<!-- 답글 쓰기 -->
+  	<insert id="answerWrite" parameterType="WriteVo">
+  		insert into write (w_no, b_no, w_pno, id, w_title, w_gno, w_date, w_cnt, w_name, w_dlt) 
+  		values (w_no.nextval, #{b_no}, #{w_pno}, #{id}, #{w_title}, #{w_gno}, sysdate, #{w_cnt}, #{w_name}, 'n')  		
+  	</insert>
 </mapper>

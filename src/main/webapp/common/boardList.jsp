@@ -21,16 +21,20 @@
 <!-- Custom styles for this template -->
 <link href="/css/dashboard.css" rel="stylesheet">
 <link href="/css/blog.css" rel="stylesheet">
-<script>
+<script>	
 	$(function(){
-		$("#data").on("click", function(){
-			$("#id").val($(this).data("id"));
-			$("#frm").submit();
-		});		
+		$("table tbody tr").on("click", function(){
+			//tr태그의 data-id 속성 값을 읽어서 input 태그의 id 값으로 설정
+			//form 태그를 submit
+			if($(this).data("id2") == 'n'){
+				$("#id").val($(this).data("id"));
+				$("#frm").submit();
+			}			
+		});
 		
 		$("#newWritebtn").on("click", function(){
 			$("#frm2").submit();
-		});
+		});		
 	});
 </script>
 </head>
@@ -60,30 +64,33 @@
 								</thead>
 								<tbody>
 								<%request.setAttribute("nbsp", " "); %>
-									<c:forEach items="${writeList}" var="vo"><c:choose>
-									<c:when test="${vo.w_dlt=='y'}">
-									<tr>
-										<th>${vo.w_no}</th>
-										<th>${fn:replace('[삭제된 글입니다]', nbsp, '&nbsp&nbsp&nbsp;')}</th>
-										<th>${vo.w_name}</th>										
-										<th><fmt:formatDate value="${vo.w_date}" pattern="yyyy/MM/dd" /></th>
-									</tr>
-									</c:when>
-									<c:when test="${vo.w_dlt=='n'}">
-									<tr id="data" data-id="${vo.w_no}">
-										<th>${vo.w_no}</th>
-										<th>${fn:replace(vo.w_title, nbsp, '&nbsp&nbsp;')}</th>
-										<th>${vo.w_name}</th>
-										<th><fmt:formatDate value="${vo.w_date}" pattern="yyyy/MM/dd" /></th>
-									</tr>
-									</c:when></c:choose></c:forEach>
+									<c:forEach items="${writeList}" var="vo">
+										<c:choose>
+											<c:when test="${vo.w_dlt=='n'}">
+												<tr data-id="${vo.w_no}" data-id2="${vo.w_dlt}">
+													<td>${vo.w_no}</td>
+													<td>${fn:replace(vo.w_title, nbsp, '&nbsp&nbsp;')}</td>
+													<td>${vo.w_name}</td>
+													<td><fmt:formatDate value="${vo.w_date}" pattern="yyyy/MM/dd" /></td>
+												</tr>
+											</c:when>
+											<c:when test="${vo.w_dlt=='y'}">
+												<tr>
+													<td>${vo.w_no}</td>
+													<td>${fn:replace('[삭제된 글입니다]', nbsp, '&nbsp&nbsp&nbsp;')}</td>
+													<td></td>										
+													<td></td>
+												</tr>
+											</c:when>
+										</c:choose>
+									</c:forEach> 
 								</tbody>
 							</table>							
+						</div>
 						<form id="frm2" action="/newWrite" method="get">
 							<button type="submit" id="newWritebtn" class="btn btn-default pull-right">새글 등록</button>
 							<input type="hidden" name="b_no" id="b_no" value="${b_no }">
 						</form>												
-						</div>
 					</div>
 				</div>
 			</div>

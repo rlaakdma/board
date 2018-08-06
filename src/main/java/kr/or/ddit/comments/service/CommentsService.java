@@ -37,4 +37,10 @@ public class CommentsService implements CommentsServiceInf {
 		CommentsDaoInf commentsDao = new CommentsDao();
 		return commentsDao.getComments(w_no);
 	}
+
+	@Override
+	public int updateCnt(int c_no) {
+		CommentsDaoInf commentsDao = new CommentsDao();
+		return commentsDao.updateCnt(c_no);
+	}
 }

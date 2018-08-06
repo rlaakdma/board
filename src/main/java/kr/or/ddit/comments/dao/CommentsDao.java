@@ -43,8 +43,26 @@ public class CommentsDao implements CommentsDaoInf {
 	@Override
 	public List<CommentsVo> getComments(int w_no) {
 		SqlSession session = sqlSessionFactory.openSession();
-		 List<CommentsVo> commentsVo = session.selectList("comments.getComments",w_no);
+		List<CommentsVo> commentsVo = session.selectList("comments.getComments",w_no);
 		session.close();
 		return commentsVo;
+	}
+	
+	/**
+	 * Method : updateCnt
+	 * 최초작성일 : 2018. 8. 1.
+	 * 작성자 : user
+	 * 변경이력 :
+	 * @param c_no
+	 * @return
+	 * Method 설명 : 매개변수를 통해 댓글을 삭제한다.
+	 */
+	@Override
+	public int updateCnt(int c_no) {
+		SqlSession session = sqlSessionFactory.openSession();
+		int updateCnt = session.update("comments.updateCnt", c_no);
+		session.commit();
+		session.close();
+		return updateCnt;
 	}
 }

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import kr.or.ddit.board.model.BoardVo;
 import kr.or.ddit.board.service.BoardService;
 import kr.or.ddit.board.service.BoardServiceInf;
+import kr.or.ddit.student.model.StudentVo;
 
 /**
  * Servlet implementation class UpdateBoardServlet
@@ -42,6 +43,10 @@ public class UpdateBoardServlet extends HttpServlet {
 		boardService.boardUpdate(boardVo);
 
 		HttpSession session = request.getSession();
+		
+		StudentVo studentVo = (StudentVo) session.getAttribute("studentVo");
+		int id3 = studentVo.getId();
+		System.out.println(id3);
 		
 		List<BoardVo> boardYList = boardService.getYboard();
 		session.setAttribute("boardYList", boardYList);

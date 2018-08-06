@@ -46,7 +46,7 @@ public class CntServlet extends HttpServlet {
 	
 		request.setAttribute("commentsList", commentsList);				
 		
-		request.getRequestDispatcher("/common/writeDetail.jsp?id="+w_no).forward(request, response);
+		response.sendRedirect("/writeDetail?id="+w_no);
 		
 		// 게시글 상세조회 화면으로 이동
 //		response.sendRedirect("/writeDetail?id="+w_no);
@@ -55,7 +55,6 @@ public class CntServlet extends HttpServlet {
 		// redirect : 클라이언트 최초요청 -> 클라이언트에게 다른 주소로 재 요청하라고 응답 -> 리다이렉트 정보를 바탕으로 재요청		
 	}
 	
-	// 댓글 삭제
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 	}
